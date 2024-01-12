@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock title %}
+{% block content %}
+<div class="text-center">
+    <h1 class="fs-1 mb-3">Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger mb-3" role="alert">
+            {% for error in form.non_field_errors %}
+            {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" name="username" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+        </div>
+        <button class="btn btn-success" type="submit">Login</button>
+    </form>
+</div>
+{% endblock content %}

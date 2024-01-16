@@ -25,3 +25,7 @@ urlpatterns = [
     # TEMP
     path('', views.index, name='index'),
 ]
+
+admin.site.index_title = 'Dashboard'
+admin.site.site_title = 'QuizAT Administration'
+admin.site.site_header = 'QuizAT Administration'

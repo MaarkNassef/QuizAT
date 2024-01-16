@@ -1,23 +1,37 @@
 {% extends 'registration_base.html' %}
-{% block title %}Login{% endblock title %}
+{% block title %}Sign Up{% endblock title %}
 {% block container %}
 <div class="text-center">
     <h1 class="display-4 fs-3 mb-3">Sign Up</h1>
     <form method="post">
         {% csrf_token %}
-        {% if form.non_field_errors %}
+        {% if not form.non_field_errors %}
+            {% for field in form %}
+                {% if field.errors %}
+                <div class="alert alert-danger mb-3 text-start" role="alert">
+                    <ul class="mb-0">
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
         <div class="alert alert-danger mb-3" role="alert">
             {% for error in form.non_field_errors %}
-            {{ error }}
+                {{ error }}
             {% endfor %}
-          </div>
+        </div>
         {% endif %}
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput_name" name="full_name" placeholder="name" required>
+            <input type="text" class="form-control" id="floatingInput_name" name="full_name" placeholder="name" required
+            {% if form.full_name.value %} value="{{form.full_name.value}}"{% endif %}>
             <label for="floatingInput_name">Name</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required>
+            <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required
+            {% if form.email.value %} value="{{form.email.value}}"{% endif %}>
             <label for="floatingInput">Email address</label>
         </div>
         <div class="form-floating mb-3">
@@ -28,7 +42,30 @@
             <input type="password" class="form-control" id="floatingPassword2" name="password2" placeholder="Password" required>
             <label for="floatingPassword2">Confirm Password</label>
         </div>
+        <div class="form-check form-switch mb-3 text-start">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+            <label class="form-check-label" for="flexSwitchCheckChecked">You are a student.</label>
+        </div>
+        <div class="form-floating mb-3" id="aid_div" style="display: block;">
+            <input type="text" class="form-control" id="floatingAid" name="academic_id" placeholder="aid" required>
+            <label for="floatingAid">Academic ID</label>
+        </div>
         <button class="btn btn-success" type="submit">Sign Up</button>
     </form>
 </div>
+<script>
+    var checkbox = document.getElementById("flexSwitchCheckChecked");
+    var academic_id_div = document.getElementById("aid_div");
+    checkbox.addEventListener("change", function () {
+    if (checkbox.checked) {
+        academic_id_div.style.display = "block";
+        document.querySelector('label[for="flexSwitchCheckChecked"]').innerHTML = "You are a student.";
+        document.getElementById("floatingAid").value = "";
+    } else {
+        academic_id_div.style.display = "none";
+        document.querySelector('label[for="flexSwitchCheckChecked"]').innerHTML = "You are a teacher.";
+        document.getElementById("floatingAid").value = "";
+    }
+});
+</script>
 {% endblock container %}

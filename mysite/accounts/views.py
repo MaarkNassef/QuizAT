@@ -4,18 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 
-# TEMP
-@login_required
-def index(request):
-    return render(request, 'base.html')
-
 def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect(reverse_lazy('index'))
+            return redirect(reverse_lazy('main:index'))
     else:
         form = CustomUserCreationForm()
 

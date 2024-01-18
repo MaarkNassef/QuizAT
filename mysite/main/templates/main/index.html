@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+{% if user.is_teacher %}
+<h1>Hello Mr. {{user.full_name}}</h1>
+{% else %}
+<h1>Student: {{user.full_name}}</h1>
+{% endif %}
+{% endblock content %}

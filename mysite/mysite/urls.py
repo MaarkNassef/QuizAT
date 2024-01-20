@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('', include('main.urls')),
+    path('', include('groups.urls')),
 ]
 
 admin.site.index_title = 'Dashboard'

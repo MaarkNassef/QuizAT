@@ -14,12 +14,12 @@
         </div>
     </div>
     {% endif %}
-    {% for i in range %}
+    {% for group in group_list %}
     <div class="col">
         <div class="card border-dark mb-3 h-100">
-            <div class="card-header">Subject name</div>
+            <div class="card-header">{{group.name}}</div>
             <div class="card-body">
-                <p class="card-text">xxx students inside.</p>
+                <p class="card-text">{{group.members.all|length}} students inside.</p>
                 <div class="text-end">
                     <a href="#" class="btn btn-dark">Show group</a>
                 </div>

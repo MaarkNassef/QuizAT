@@ -21,7 +21,7 @@
             <div class="card-body">
                 <p class="card-text">{{group.members.all|length}} students inside.</p>
                 <div class="text-end">
-                    <a href="#" class="btn btn-dark">Show group</a>
+                    <a href="{% url "groups:group" group.id %}" class="btn btn-dark">Show group</a>
                 </div>
             </div>
         </div>

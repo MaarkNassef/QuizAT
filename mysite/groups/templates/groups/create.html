@@ -1,0 +1,27 @@
+{% extends "form_base.html" %}
+{% block title %}Create group{% endblock title %}
+{% block container %}
+<div class="text-center">
+    <h1 class="display-4 fs-3 mb-3">Create new group</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+            <input
+            type="text"
+            class="form-control"
+            name="{{form.name.name}}"
+            id="name_id"
+            placeholder="Group Name"
+            />
+            <label for="name_id">Group Name</label>
+        </div>
+        <button
+            type="submit"
+            class="btn btn-success"
+        >
+            Create Group
+        </button>
+        
+    </form>
+</div>
+{% endblock container %}

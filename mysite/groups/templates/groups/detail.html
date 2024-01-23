@@ -14,10 +14,33 @@
             <a class="text-decoration-none" href="#"><h3 class="display-4 fs-5">View pending requests</h3></a>
         </div>
         <div class="mb-3">
-            <a class="text-decoration-none" href="#"><h3 class="display-4 fs-5">Copy invitaion link</h3></a>
+            {% comment %} <a class="text-decoration-none" href="#"><h3 class="display-4 fs-5">Copy invitaion link</h3></a> {% endcomment %}
+            <!-- Button trigger modal -->
+            <a class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#CopyLinkModal" href="#"><h3 class="display-4 fs-5">Copy invitaion link</h3></a>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="CopyLinkModal" tabindex="-1" aria-labelledby="CopyLinkdalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="CopyLinkdalLabel">Copy Link</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="url">Link URL</label>
+                            <input type="text" class="form-control" id="url" value="http://127.0.0.1:8000{% url "groups:invitation" group.id %}" readonly>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="copyUrl()">Copy Link</button>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
-            {% comment %} <a class="text-decoration-none text-danger" href="{% url "groups:delete_group" group.id %}"><h3 class="display-4 fs-5">Delete group</h3></a> {% endcomment %}
             <!-- Button trigger modal -->
             <a class="text-decoration-none text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" href="#"><h3 class="display-4 fs-5">Delete group</h3></a>
             
@@ -45,4 +68,19 @@
         {{group.name}}
     </div>
 </div>
+<script>
+    function copyUrl() {
+      /* Get the text field */
+      var copyText = document.getElementById("url");
+  
+      /* Select the text field */
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+  
+      /* Copy the text inside the text field */
+      document.execCommand("copy");
+  
+      alert("Link copied successfully!");
+    }
+  </script>
 {% endblock content %}

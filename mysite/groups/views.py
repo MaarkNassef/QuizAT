@@ -41,12 +41,15 @@ class GroupDeleteView(LoginRequiredMixin, DeleteView):
 def GroupInvitationView(request, pk):
     group = Group.objects.get(id=pk)
 
+    if request.user in group.members.all() or request.user == group.admin:
+        return redirect(reverse_lazy('groups:group', kwargs={'pk':pk}))
+
+    if request.user.is_teacher():
+        return render(request, 'groups/invitation_success.html', {'msg': "You can't join as you are a teacher."})
+
     if request.user in group.pending_requests.all():
         return redirect(reverse_lazy('groups:invitation_success'))
     
-    if request.user in group.members.all():
-        return redirect(reverse_lazy('groups:group', kwargs={'pk':pk}))
-
     if request.method == 'POST':
         group.pending_requests.add(request.user)
         return redirect(reverse_lazy('groups:invitation_success'))

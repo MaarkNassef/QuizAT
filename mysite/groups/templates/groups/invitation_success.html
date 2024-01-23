@@ -2,7 +2,11 @@
 {% block title %}Invitation{% endblock title %}
 {% block container %}
 <div class="text-center">
+    {% if not msg %}
     <h1 class="display-4 fs-3 mb-3">Your request is waiting for approval. </h1>
+    {% else %}
+    <h1 class="display-4 fs-3 mb-3">{{msg}} </h1>
+    {% endif %}
     <a href="/" class="text-decoration-none btn btn-success">Go to home</a>
 </div>
 {% endblock container %}

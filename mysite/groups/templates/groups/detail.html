@@ -182,7 +182,7 @@
 
             async function fetchData(page) {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/groups/api/get_pending_requests/3/?page=${page}`);
+                    const response = await fetch(`http://127.0.0.1:8000/groups/api/get_pending_requests/{{group.id}}/?page=${page}`);
                     const responseData = await response.json();
                     const data = responseData.data;
                     num_of_pages = responseData.num_of_pages;
@@ -193,7 +193,7 @@
 
                     if (data.length === 0) {
                         const noDataRow = document.createElement('tr');
-                        noDataRow.innerHTML = '<td colspan="5">No data to show</td>';
+                        noDataRow.innerHTML = '<td colspan="5" class="text-center">No data to show</td>';
                         tableBody.appendChild(noDataRow);
                     } else {
                         data.forEach(req => {
@@ -252,7 +252,7 @@
 
             async function fetchData(page) {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/groups/api/get_students/3/?page=${page}`);
+                    const response = await fetch(`http://127.0.0.1:8000/groups/api/get_students/{{group.id}}/?page=${page}`);
                     const responseData = await response.json();
                     const data = responseData.data;
                     num_of_pages = responseData.num_of_pages;
@@ -263,7 +263,7 @@
 
                     if (data.length === 0) {
                         const noDataRow = document.createElement('tr');
-                        noDataRow.innerHTML = '<td colspan="4">No data to show</td>';
+                        noDataRow.innerHTML = '<td colspan="4" class="text-center">No data to show</td>';
                         tableBody.appendChild(noDataRow);
                     } else {
                         data.forEach(req => {

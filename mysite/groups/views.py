@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import Group
 from .forms import GroupForm
+from math import ceil
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
@@ -58,3 +60,25 @@ def GroupInvitationView(request, pk):
 
 def GroupInvitationSuccessView(request):
     return render(request, 'groups/invitation_success.html')
+
+def get_pending_requests(request, group_id):
+    group = Group.objects.get(pk=group_id)
+
+    if request.user == group.admin:
+        page_num = int(request.GET.get('page', 1)) - 1
+        data = [{'id': i.id, 'email': i.email, 'full_name': i.full_name, 'academic_id': i.academic_id}
+                for i in group.pending_requests.all()[page_num*10 : min((page_num + 1), len(group.pending_requests.all()))]]
+        return JsonResponse({'data':data, 'num_of_pages': ceil(len(group.pending_requests.all())/10), 'current_page': page_num+1})
+    
+    return JsonResponse({'data': 'unauthorized'})
+
+def get_students(request, group_id):
+    group = Group.objects.get(pk=group_id)
+
+    if request.user == group.admin:
+        page_num = int(request.GET.get('page', 1)) - 1
+        data = [{'id': i.id, 'email': i.email, 'full_name': i.full_name, 'academic_id': i.academic_id}
+                for i in group.members.all()[page_num*10 : min((page_num + 1), len(group.members.all()))]]
+        return JsonResponse({'data':data, 'num_of_pages': ceil(len(group.members.all())/10), 'current_page': page_num+1})
+    
+    return JsonResponse({'data': 'unauthorized'})

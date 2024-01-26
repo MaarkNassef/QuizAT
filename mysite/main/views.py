@@ -4,4 +4,10 @@ from groups.models import Group
 
 @login_required
 def index(request):
-    return render(request, 'main/index.html' , {'group_list': Group.objects.all()})
+    groups = None
+    if request.user.is_teacher():
+        groups = Group.objects.filter(admin=request.user)
+    else:
+        groups = [i for i in Group.objects.all() if i.members.contains(request.user)]
+
+    return render(request, 'main/index.html' , {'group_list': groups})

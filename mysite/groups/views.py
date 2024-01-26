@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,6 +28,12 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
 class GroupDetailView(LoginRequiredMixin, DetailView):
     model = Group
     template_name = 'groups/detail.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object().admin or self.get_object().members.contains(request.user):
+            return super().get(request, *args, **kwargs)
+        
+        return HttpResponse("You are not allowed to view this group.", status=401)
 
 class GroupDeleteView(LoginRequiredMixin, DeleteView):
     model = Group

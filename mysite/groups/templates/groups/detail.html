@@ -6,7 +6,9 @@
         <div class="mb-3">
             <h3 class="display-4 fs-5">Admin</h3>
             <h3 class="display-4 fs-6">{{group.admin.full_name}}</h3>
+            <a class="display-4 fs-6 text-decoration-none" href="mailto:{{group.admin.email}}">{{group.admin.email}}</a>
         </div>
+        {% if user == group.admin %}
         <div class="mb-3">
             <!-- Button trigger modal -->
             <a class="text-decoration-none" id="view-students" data-bs-toggle="modal" data-bs-target="#membersModal" href="#">
@@ -98,6 +100,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div class="mb-3">
             <!-- Button trigger modal -->
             <a class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#CopyLinkModal" href="#">
@@ -127,6 +130,7 @@
                 </div>
             </div>
         </div>
+        {% if user == group.admin %}
         <div class="mb-3">
             <!-- Button trigger modal -->
             <a class="text-decoration-none text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" href="#">
@@ -153,6 +157,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
     <div class="col-10">
         {{group.name}}

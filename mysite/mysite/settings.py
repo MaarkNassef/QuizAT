@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'accounts',
     'main',
     'groups',
+    'quizzes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -9,6 +9,7 @@ from .models import Group
 from .forms import GroupForm
 from math import ceil
 import json
+import datetime
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
@@ -28,6 +29,11 @@ class GroupCreateView(LoginRequiredMixin, CreateView):
 class GroupDetailView(LoginRequiredMixin, DetailView):
     model = Group
     template_name = 'groups/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context["now"] = datetime.datetime.now()
+        return context
 
     def get(self, request, *args, **kwargs):
         if request.user == self.get_object().admin or self.get_object().members.contains(request.user):

@@ -162,6 +162,18 @@
     <div class="col-10">
         <h1 class="display-4 fs-3 mb-3">{{group.name}}</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card text-bg-success mb-3 h-100">
+                    <div class="card-header">Create new quiz</div>
+                    <div class="card-body">
+                        <p class="card-text">Create a new quiz and test your students.</p>
+                        <br>
+                        <div class="text-end">
+                            <a href="#" class="btn btn-light text-success">Create Quiz</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% for quiz in group.quiz_set.all %}
             <div class="col">
                 <div class="card border-dark mb-3 h-100">
@@ -170,7 +182,7 @@
                         <p class="card-text">Start time: {{quiz.start_time}}<br> Duration: {{quiz.get_duration_in_minutes}} minutes.</p>
                         {% if quiz.start_time|date:"Y-m-d H:i:s" < now|date:"Y-m-d H:i:s" %}
                         <div class="text-end">
-                            <a href="#" class="btn btn-dark">Start Quiz</a>
+                            <a href="{% url "quizzes:QuizDetailView" quiz.id %}" class="btn btn-dark">Start Quiz</a>
                         </div>
                         {% endif %}
                     </div>

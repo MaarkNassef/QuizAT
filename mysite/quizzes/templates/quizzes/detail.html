@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{quiz.title}}@QuizAT{% endblock title %}
+{% block content %}
+<div class="col-8 mx-auto">
+    <div id="timer" class="text-center display-5 fs-5">Time Left: <span id="countdown"></span></div>
+    <form method="post" id="quizForm"> {% csrf_token %}
+        {% for question in quiz.question_set.all %}
+            <fieldset class="mb-3">
+                <legend class="display-5 fs-3">{{question.text}}</legend>
+                {% for choice in question.choice_set.all %}
+                <label>
+                    <input type="radio" name="{{question.id}}" value="{{choice.id}}"> {{choice.text}}
+                </label><br>
+                {% endfor %}
+            </fieldset>
+        {% endfor %}
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const quizDuration = {{quiz.get_duration_in_minutes}}*60;
+
+    function updateTimerDisplay(remainingTime) {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        document.getElementById("countdown").innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer(duration) {
+        let timeLeft = duration;
+        updateTimerDisplay(timeLeft);
+
+        const timerInterval = setInterval(() => {
+            timeLeft--;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById("timer").innerHTML = "Time's Up!";
+                document.getElementById("quizForm").submit();
+            } else {
+                updateTimerDisplay(timeLeft);
+            }
+        }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        startTimer(quizDuration);
+    });
+
+</script>
+    
+{% endblock content %}

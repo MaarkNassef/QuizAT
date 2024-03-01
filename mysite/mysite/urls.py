@@ -22,6 +22,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('', include('main.urls')),
     path('groups/', include('groups.urls')),
+    path('quizzes/', include('quizzes.urls')),
 ]
 
 admin.site.index_title = 'Dashboard'

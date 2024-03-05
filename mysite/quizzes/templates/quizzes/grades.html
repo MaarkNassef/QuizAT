@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{quiz.title}}'s Grades@QuizAT{% endblock title %}
+{% block content %}
+<div class="col-8 mx-auto">
+    <div class="text-center mb-3">
+        <h1 class="fs-4 display-4">{{quiz.title}}'s Grades</h1>
+        <button
+            type="button"
+            class="btn btn-success mb-3"
+            onclick="window.location.href='{% url "quizzes:DownloadGrades" quiz.id %}'; return false;"
+        >
+            Download Grades
+        </button>
+        
+    </div>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Academic ID</th>
+              <th scope="col">Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in quiz.grade_set.all %}
+            <tr>
+                <td>{{grade.student.full_name}}</td>
+                <td>{{grade.student.academic_id}}</td>
+                <td>{{grade.right_answers}}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan=3>
+                    <div class="text-center"> No data to show!</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

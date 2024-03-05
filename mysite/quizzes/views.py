@@ -8,6 +8,7 @@ from groups.models import Group
 from datetime import datetime, timedelta
 from django.http import JsonResponse
 import json
+import csv
 
 
 class QuizDetailView(DetailView):
@@ -90,3 +91,26 @@ class QuestionDeleteView(DeleteView):
         quiz = question.quiz
         question.delete()
         return HttpResponseRedirect(reverse_lazy('quizzes:ShowQuestions', kwargs={'quiz_id':quiz.id}))
+    
+def ShowGrades(request, quiz_id):
+    quiz = Quiz.objects.get(pk=quiz_id)
+    return render(request, 'quizzes/grades.html', context={'quiz': quiz})
+
+
+def DownloadGrades(request, quiz_id):
+    quiz = Quiz.objects.get(pk=quiz_id)
+
+    data = [
+        ['Name', 'Academic ID', 'Grade'],
+    ]
+    for grade in quiz.grade_set.all():
+        data.append([grade.student.full_name, grade.student.academic_id, grade.right_answers])
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{quiz.title}_{quiz.group.name}.csv"'
+
+    writer = csv.writer(response)
+    for row in data:
+        writer.writerow(row)
+
+    return response

@@ -187,6 +187,7 @@
                                 {% endif %}
                             {% else %}
                                 <a href="{% url "quizzes:ShowQuestions" quiz.id %}" class="btn btn-dark">Show Questions</a>
+                                <a href="{% url "quizzes:ShowGrades" quiz.id %}" class="btn btn-dark">Show Grades</a>
                             {% endif %}
                             </div>
                     </div>

@@ -1,0 +1,57 @@
+{% extends "form_base.html" %}
+{% block title %}Create Quiz{% endblock title %}
+{% block container %}
+<div class="text-center">
+    <h1 class="display-4 fs-3 mb-3">Create new quiz</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+            <input
+            type="text"
+            class="form-control"
+            name="{{form.title.name}}"
+            id="title_id"
+            placeholder="Quiz Name"
+            />
+            <label for="title_id">Quiz title</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input
+            type="date"
+            class="form-control"
+            name="date"
+            id="date_id"
+            placeholder="Quiz date"
+            />
+            <label for="date_id">Quiz date</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input
+            type="time"
+            class="form-control"
+            name="{{form.start_time.name}}"
+            id="start_time_id"
+            placeholder="Quiz start time"
+            />
+            <label for="start_time_id">Quiz start time</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input
+            type="number"
+            class="form-control"
+            name="{{form.duration.name}}"
+            id="duration_id"
+            placeholder="Duration in minutes"
+            />
+            <label for="duration_id">Duration in minutes</label>
+        </div>
+        <button
+            type="submit"
+            class="btn btn-success"
+        >
+            Create Quiz
+        </button>
+        
+    </form>
+</div>
+{% endblock container %}

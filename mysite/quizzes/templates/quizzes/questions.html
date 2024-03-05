@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}{{quiz.title}}@QuizAT{% endblock title %}
+{% block content %}
+<div class="col-8 mx-auto">
+    <div class="text-center mb-3">
+        <h1 class="fs-4 display-4">{{quiz.title}}</h1>
+    </div>
+    <div class="rounded-4 mb-3 card bg-dark bg-opacity-10 p-3 border-0">
+        <h1 class="fs-4 display-4">Add Question</h1>
+        <div class="text-center">
+            <button
+                type="button"
+                class="btn btn-success"
+                data-bs-toggle="modal" 
+                data-bs-target="#Backdrop"
+            >
+                Add
+            </button>
+            <div class="modal fade" id="Backdrop" data-bs-backdrop="popover" data-bs-keyboard="false" tabindex="-1" aria-labelledby="BackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="BackdropLabel">Add Question</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post" id="quizForm"> {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" placeholder="Enter question" id="floatingTextQuestion" style="height: 100px"></textarea>
+                            <label for="floatingTextQuestion">Question</label>
+                        </div>
+                            <div id="choices" class="mb-3 text-start">
+                                
+                            </div>
+                            <button type="button" id="addChoice" class="btn btn-success">Add Choice</button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" onclick="submitForm()">Save</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+        
+    </div>
+    {% for question in quiz.question_set.all %}
+    <div class="rounded-4 mb-3 card bg-dark bg-opacity-10 p-3 border-0">
+        <fieldset class="mb-3">
+            <legend class="display-4 fs-4">{{question.text}}</legend>
+            {% for choice in question.choice_set.all %}
+            <label>
+                <input type="radio" class="disabled" name="{{question.id}}" value="{{choice.id}}" disabled {% if choice.is_correct %}checked{% endif %}> {{choice.text}}
+            </label><br>
+            {% endfor %}
+        </fieldset>
+        <div class="text-end mx-0">
+            <a href="{% url "quizzes:QuestionDeleteView" question.id %}" class="btn btn-danger">Delete</a>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.getElementById('addChoice').addEventListener('click', function() {
+        var choicesDiv = document.getElementById('choices');
+        var input = document.createElement('input');
+        input.setAttribute('class', 'form-control mb-3');
+        input.setAttribute('type', 'text');
+        input.setAttribute('placeholder', 'Enter your text');
+        
+        var saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.setAttribute('class', 'btn btn-success')
+        saveButton.addEventListener('click', function() {
+            var text = input.value.trim();
+            if (text !== '') {
+                var div = document.createElement('div');
+                var text_to_add = document.createElement('span');
+                text_to_add.setAttribute('class', 'ms-1');
+                text_to_add.textContent = text
+                var newChoice = document.createElement('input');
+                newChoice.setAttribute('type', 'radio');
+                newChoice.setAttribute('name', 'choice');
+                newChoice.setAttribute('value', text);
+                div.appendChild(newChoice);
+                div.appendChild(text_to_add);
+                choicesDiv.appendChild(div);
+                input.value = '';
+                saveButton.remove();
+                input.remove();
+            }
+        });
+
+        choicesDiv.appendChild(input);
+        choicesDiv.appendChild(saveButton);
+    });
+
+    function submitForm() {
+        var radios = document.getElementsByName('choice');
+        var question = document.getElementById('floatingTextQuestion').value; // Get the value of the textarea
+        var allValues = [];
+        
+        for (var i = 0; i < radios.length; i++) {
+            allValues.push({
+                value: radios[i].value,
+                checked: radios[i].checked
+            });
+        }
+    
+        fetch("{% url "quizzes:ShowQuestions" quiz.id %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                question: question,
+                choices: allValues
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Handle success, e.g., redirect or update UI
+                window.location.href = "{% url 'quizzes:ShowQuestions' quiz.id %}";
+            } else {
+                console.error('Failed to submit form');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+</script>
+
+{% endblock content %}

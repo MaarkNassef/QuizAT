@@ -169,7 +169,7 @@
                         <p class="card-text">Create a new quiz and test your students.</p>
                         <br>
                         <div class="text-end">
-                            <a href="#" class="btn btn-light text-success">Create Quiz</a>
+                            <a href="{% url "quizzes:QuizCreateView" group.id %}" class="btn btn-light text-success">Create Quiz</a>
                         </div>
                     </div>
                 </div>
@@ -180,11 +180,15 @@
                     <div class="card-header">{{quiz.title}}</div>
                     <div class="card-body">
                         <p class="card-text">Start time: {{quiz.start_time}}<br> Duration: {{quiz.get_duration_in_minutes}} minutes.</p>
-                        {% if quiz.start_time|date:"Y-m-d H:i:s" < now|date:"Y-m-d H:i:s" %}
                         <div class="text-end">
-                            <a href="{% url "quizzes:QuizDetailView" quiz.id %}" class="btn btn-dark">Start Quiz</a>
-                        </div>
-                        {% endif %}
+                            {% if quiz.group.admin != user %}
+                                {% if quiz.start_time|date:"Y-m-d H:i:s" < now|date:"Y-m-d H:i:s" %}
+                                    <a href="{% url "quizzes:QuizDetailView" quiz.id %}" class="btn btn-dark">Start Quiz</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url "quizzes:ShowQuestions" quiz.id %}" class="btn btn-dark">Show Questions</a>
+                            {% endif %}
+                            </div>
                     </div>
                 </div>
             </div>
